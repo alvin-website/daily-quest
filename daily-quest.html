@@ -769,8 +769,8 @@ if (!state.shownOverlays) state.shownOverlays = {};
 
 const today = todayStr();
 if (state.lastDate && state.lastDate !== today) {
-  const allDone = QUESTS.every(q => state.done[q.id]);
-  state.streak = allDone ? (state.streak||0)+1 : 0;
+  const doneCt = QUESTS.filter(q => state.done[q.id]).length;
+  state.streak = doneCt >= 5 ? (state.streak||0)+1 : 0;
   state.done = {}; state.penalties = {};
   state.lastDate = today; saveState(state);
 } else if (!state.lastDate) { state.lastDate = today; saveState(state); }
