@@ -473,7 +473,13 @@ function getState(){
     weekData:{},customAchieves:[],customSlotsUsed:0,customWeekStart:''};
 }
 function saveState(s){localStorage.setItem('aq_state_v1',JSON.stringify(s));}
-function todayStr(){return new Date().toISOString().slice(0,10);}
+function todayStr(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 function getWeekStart(){
   const d=new Date();d.setDate(d.getDate()-d.getDay());return d.toISOString().slice(0,10);
 }
@@ -890,6 +896,14 @@ function stopConfetti(){
   if(confettiAnim){cancelAnimationFrame(confettiAnim);confettiAnim=null;}
   const canvas=document.getElementById('confettiCanvas');
   canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+}
+
+// ONE-TIME RESTORE
+if(state.totalXp===0&&!state.restored){
+  state.totalXp=340;
+  state.streak=2;
+  state.restored=true;
+  saveState(state);
 }
 
 function renderAll(){renderHero();renderQuests();renderPenalties();}
