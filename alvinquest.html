@@ -367,6 +367,7 @@ const QUESTS=[
   {id:'study',icon:'📚',name:'Study Session',sub:'Uni work / trading demo',xp:25},
   {id:'fun',icon:'😂',name:'Fun Time',sub:'Guilt-free chill',xp:10},
   {id:'nophone',icon:'🌙',name:'No Phone at Night',sub:'After 10 PM',xp:20},
+  {id:'diet',icon:'🥗',name:'Follow Diet',sub:'No white bread, rice, excess oil or chips',xp:20},
 ];
 const PENALTIES=[
   {id:'insta',icon:'📱',name:'Opened Instagram',cost:10},
@@ -499,7 +500,7 @@ if(state.lastDate&&state.lastDate!==today){
   state.weekData[state.lastDate]={done:questsDone,xp:Math.max(0,dayXp)};
   // Streak
   const doneCt=QUESTS.filter(q=>state.done[q.id]).length;
-  if(state.dayEnded&&doneCt>=5)state.streak=(state.streak||0)+1;
+  if(state.dayEnded&&doneCt>=6)state.streak=(state.streak||0)+1;
   else state.streak=0;
   state.done={};state.penalties={};state.notes={};state.dayEnded=false;
   state.lastDate=today;saveState(state);
@@ -824,7 +825,7 @@ function endDay(){
   const done=QUESTS.filter(q=>state.done[q.id]).length;
   state.dayEnded=true;
   // Update streak immediately so user sees it
-  if(done>=5)state.streak=(state.streak||0)+1;
+  if(done>=6)state.streak=(state.streak||0)+1;
   else state.streak=0;
   saveState(state);
   checkMilestones({});
