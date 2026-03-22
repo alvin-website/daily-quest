@@ -233,7 +233,7 @@ h1{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,4vw,1.5rem);colo
 
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="showPage('quests')">Quests</button>
-  <button class="nav-tab" onclick="showPage('summary')">Weekly</button>
+
   <button class="nav-tab" onclick="showPage('achievements')">Achievements</button>
 </div>
 
@@ -280,23 +280,6 @@ h1{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,4vw,1.5rem);colo
 
   <button class="end-day-btn" id="endDayBtn" onclick="endDay()">✓ End Day</button>
   <button class="reset-btn" onclick="resetDay()">↺ Reset Today's Progress</button>
-</div>
-
-<!-- WEEKLY SUMMARY PAGE -->
-<div class="page" id="page-summary">
-  <div class="summary-card">
-    <h3>📊 This Week</h3>
-    <div class="week-grid" id="weekGrid"></div>
-    <div class="summary-stats">
-      <div class="sum-stat"><div class="sv" id="sumQuestsTotal">0</div><div class="sl">Quests Done</div></div>
-      <div class="sum-stat"><div class="sv" id="sumBestDay">0/7</div><div class="sl">Best Day</div></div>
-      <div class="sum-stat"><div class="sv" id="sumXpWeek">0</div><div class="sl">XP This Week</div></div>
-    </div>
-  </div>
-  <div class="motivate-card">
-    <p id="verseText2">"The plans of the diligent lead to profit."</p>
-    <div class="verse-ref">Proverbs 21:5</div>
-  </div>
 </div>
 
 <!-- ACHIEVEMENTS PAGE -->
@@ -506,9 +489,8 @@ if(state.lastDate&&state.lastDate!==today){
   PENALTIES.forEach(p=>{if(state.penalties[p.id])dayXp-=p.cost;});
   state.weekData[state.lastDate]={done:questsDone,xp:Math.max(0,dayXp)};
   // Streak
-  const doneCt=QUESTS.filter(q=>state.done[q.id]).length;
-  if(state.dayEnded&&doneCt>=6)state.streak=(state.streak||0)+1;
-  else state.streak=0;
+  // Streak already incremented by End Day button - only reset if day wasn't ended
+  if(!state.dayEnded)state.streak=0;
   state.done={};state.penalties={};state.notes={};state.dayEnded=false;
   state.lastDate=today;saveState(state);
 }else if(!state.lastDate){state.lastDate=today;saveState(state);}
@@ -899,9 +881,9 @@ function stopConfetti(){
 }
 
 // ONE-TIME RESTORE
-if(state.totalXp===0&&!state.restored){
-  state.totalXp=340;
-  state.streak=2;
+if(!state.restored){
+  state.totalXp=740;
+  state.streak=3;
   state.restored=true;
   saveState(state);
 }
